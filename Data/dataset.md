@@ -2,8 +2,19 @@
 
 ## Dataset 
 
+## Overview
+This dataset is designed for training **LLM-based virtual assistants** in customer service interactions. It includes a variety of user requests, categorized by **intent and response**, along with **language variation tags**
 Each entry in the dataset contains the following fields:
 
+
+## Source of the Dataset
+This dataset is provided by **Bitext Innovations** and is publicly available at:
+
+- **Hugging Face**: [Bitext Customer Service Dataset](https://huggingface.co/datasets/bitext/Bitext-customer-support-llm-chatbot-training-dataset)
+
+Please refer to the official dataset sources for **detailed documentation and licensing information**.
+
+## Structure
 - flags: tags (explained below in the Language Generation Tags section)
 - instruction: a user request from the Customer Service
 - category: the high-level semantic category for the intent
@@ -11,136 +22,33 @@ Each entry in the dataset contains the following fields:
 - response: an example expected response from the virtual assistant
 
 ## Categories and Intents
+The dataset covers multiple **customer service categories**, including:
+- **Account Management**: create, delete, edit accounts, recover passwords.
+- **Order Processing**: cancel, change, track orders.
+- **Refunds & Payments**: check policies, get refunds, resolve payment issues.
+- **Shipping & Delivery**: address changes, delivery times.
+- **Customer Support**: contact agents, submit complaints.
 
-The categories and intents covered by the dataset are:
+## Language Variations
+The dataset includes **linguistic tags** to help train chatbots for **diverse user interactions**, such as:
+- **Politeness (P)**: "Could you please help me?"
+- **Colloquial (Q)**: "Can u cancel my order?"
+- **Errors & Typos (Z)**: "how can i activaet my card?"
 
-- ACCOUNT: create_account, delete_account, edit_account, recover_password, registration_problems, switch_account
-- CANCELLATION_FEE: check_cancellation_fee
-- CONTACT: contact_customer_service, contact_human_agent
-- DELIVERY: delivery_options, delivery_period
-- FEEDBACK: complaint, review
-- INVOICE: check_invoice, get_invoice
-- ORDER: cancel_order, change_order, place_order, track_order
-- PAYMENT: check_payment_methods, payment_issue
-- REFUND: check_refund_policy, get_refund, track_refund
-- SHIPPING_ADDRESS: change_shipping_address, set_up_shipping_address
-- SUBSCRIPTION: newsletter_subscription
+## Entities in the Dataset
+The dataset includes **predefined placeholders (entities)** that appear in customer queries. Few examples:
 
-## Entities
+| **Entity**                   | **Usage** |
+|------------------------------|----------|
+| `{{Order Number}}`           | Used in order-related intents (cancel, change, track order). |
+| `{{Invoice Number}}`         | Present in invoice-related intents. |
+| `{{Customer Support Email}}` | Customer service and support interactions. |
+| `{{Live Chat Support}}` | Used when customers want to speak with an agent. |
+| `{{Website URL}}` | Found in intents related to payments, refunds, and support. |
+| `{{Shipping Cut-off Time}}` | Appears in delivery-related intents. |
+| `{{Delivery City}}`, `{{Delivery Country}}` | Used in delivery options. |
+| `{{Money Amount}}`, `{{Refund Amount}}` | Appears in refund-related queries. |
 
-The entities covered by the dataset are:
+These placeholders help train **Named Entity Recognition (NER) models** to extract key details from customer requests.
 
-- {{Order Number}}, typically present in:
-- Intents: cancel_order, change_order, change_shipping_address, check_invoice, check_refund_policy, complaint, delivery_options, delivery_period, get_invoice, get_refund, place_order, track_order, track_refund
-- {{Invoice Number}}, typically present in:
-  - Intents: check_invoice, get_invoice
-- {{Online Order Interaction}}, typically present in:
-  - Intents: cancel_order, change_order, check_refund_policy, delivery_period, get_refund, review, track_order, track_refund
-- {{Online Payment Interaction}}, typically present in:
-  - Intents: cancel_order, check_payment_methods
-- {{Online Navigation Step}}, typically present in:
-  - Intents: complaint, delivery_options
-- {{Online Customer Support Channel}}, typically present in:
-  - Intents: check_refund_policy, complaint, contact_human_agent, delete_account, delivery_options, edit_account, get_refund, payment_issue, registration_problems, switch_account
-- {{Profile}}, typically present in:
-  - Intent: switch_account
-- {{Profile Type}}, typically present in:
-  - Intent: switch_account
-- {{Settings}}, typically present in:
-  - Intents: cancel_order, change_order, change_shipping_address, check_cancellation_fee, check_invoice, check_payment_methods, contact_human_agent, delete_account, delivery_options, edit_account, get_invoice, newsletter_subscription, payment_issue, place_order, recover_password, registration_problems, set_up_shipping_address, switch_account, track_order, track_refund
-- {{Online Company Portal Info}}, typically present in:
-  - Intents: cancel_order, edit_account
-- {{Date}}, typically present in:
-  - Intents: check_invoice, check_refund_policy, get_refund, track_order, track_refund
-- {{Date Range}}, typically present in:
-  - Intents: check_cancellation_fee, check_invoice, get_invoice
-- {{Shipping Cut-off Time}}, typically present in:
-  - Intent: delivery_options
-- {{Delivery City}}, typically present in:
-  - Intent: delivery_options
-- {{Delivery Country}}, typically present in:
-  - Intents: check_payment_methods, check_refund_policy, delivery_options, review, switch_account
-- {{Salutation}}, typically present in:
-  - Intents: cancel_order, check_payment_methods, check_refund_policy, create_account, delete_account, delivery_options, get_refund, recover_password, review, set_up_shipping_address, switch_account, track_refund
-- {{Client First Name}}, typically present in:
-  - Intents: check_invoice, get_invoice
-- {{Client Last Name}}, typically present in:
-  - Intents: check_invoice, create_account, get_invoice
-- {{Customer Support Phone Number}}, typically present in:
-  - Intents: change_shipping_address, contact_customer_service, contact_human_agent, payment_issue
-- {{Customer Support Email}}, typically present in:
-  - Intents: cancel_order, change_shipping_address, check_invoice, check_refund_policy, complaint, contact_customer_service, contact_human_agent, get_invoice, get_refund, newsletter_subscription, payment_issue, recover_password, registration_problems, review, set_up_shipping_address, switch_account
-- {{Live Chat Support}}, typically present in:
-  - Intents: check_refund_policy, complaint, contact_human_agent, delete_account, delivery_options, edit_account, get_refund, payment_issue, recover_password, registration_problems, review, set_up_shipping_address, switch_account, track_order
-- {{Website URL}}, typically present in:
-  - Intents: check_payment_methods, check_refund_policy, complaint, contact_customer_service, contact_human_agent, create_account, delete_account, delivery_options, get_refund, newsletter_subscription, payment_issue, place_order, recover_password, registration_problems, review, switch_account
-- {{Upgrade Account}}, typically present in:
-  - Intents: create_account, edit_account, switch_account
-- {{Account Type}}, typically present in:
-  - Intents: cancel_order, change_order, change_shipping_address, check_cancellation_fee, check_invoice, check_payment_methods, check_refund_policy, complaint, contact_customer_service, contact_human_agent, create_account, delete_account, delivery_options, delivery_period, edit_account, get_invoice, get_refund, newsletter_subscription, payment_issue, place_order, recover_password, registration_problems, review, set_up_shipping_address, switch_account, track_order, track_refund
-- {{Account Category}}, typically present in:
-  - Intents: cancel_order, change_order, change_shipping_address, check_cancellation_fee, check_invoice, check_payment_methods, check_refund_policy, complaint, contact_customer_service, contact_human_agent, create_account, delete_account, delivery_options, delivery_period, edit_account, get_invoice, get_refund, newsletter_subscription, payment_issue, place_order, recover_password, registration_problems, review, set_up_shipping_address, switch_account, track_order, track_refund
-- {{Account Change}}, typically present in:
-  - Intent: switch_account
-- {{Program}}, typically present in:
-  - Intent: place_order
-- {{Refund Amount}}, typically present in:
-  - Intent: track_refund
-- {{Money Amount}}, typically present in:
-  - Intents: check_refund_policy, complaint, get_refund, track_refund
-- {{Store Location}}, typically present in:
-  - Intents: complaint, delivery_options, place_order
 
-## Language Generation Tags
-
-The dataset contains tags that reflect how language varies/changes across different linguistic phenomena like colloquial or offensive language. So if an utterance for intent “cancel_order” contains the “COLLOQUIAL” tag, the utterance will express an informal language variation like: “can u cancel my order”.
-
-These tags indicate the type of language variation that the entry expresses. When associated to each entry, they allow Conversational Designers to customize training datasets to different user profiles with different uses of language. Through these tags, many different datasets can be created to make the resulting assistant more accurate and robust. A bot that sells sneakers should be mainly targeted to younger population that use a more colloquial language; while a classical retail banking bot should be able to handle more formal or polite language. The dataset also reflects commonly occurring linguistic phenomena of real-life virtual assistant, such as spelling mistakes, run-on words, punctuation errors…
-
-The dataset contains tagging for all relevant linguistic phenomena that can be used to customize the dataset for different user profiles.
-
-### Tags for Lexical variation
-
-M - Morphological variation: inflectional and derivational
-“is my SIM card active”, “is my SIM card activated”
-
-L - Semantic variations: synonyms, use of hyphens, compounding…
-“what’s my billing date", “what’s my anniversary date”
-
-### Tags for Syntactic structure variation
-
-B - Basic syntactic structure:
-“activate my SIM card”, “I need to activate my SIM card”
-
-I - Interrogative structure
-“can you activate my SIM card?”, “how do I activate my SIM card?”
-
-C - Coordinated syntactic structure
-“I have a new SIM card, what do I need to do to activate it?”
-
-N - Negation
-“I do not want this item, where to cancel my order?”
-
-### Tags for language register variations
-
-P - Politeness variation
-“could you help me activate my SIM card, please?”
-
-Q - Colloquial variation
-“can u activ8 my SIM?”
-
-W - Offensive language
-“I want to talk to a f*&%*g agent”
-
-### Tags for stylistic variations
-
-K - Keyword mode
-"activate SIM", "new SIM"
-
-E - Use of abbreviations:
-“I'm / I am interested in getting a new SIM”
-
-Z - Errors and Typos: spelling issues, wrong punctuation…
-“how can i activaet my card”
-
----

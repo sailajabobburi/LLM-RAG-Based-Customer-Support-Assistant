@@ -6,8 +6,6 @@ from langchain.embeddings import OpenAIEmbeddings
 from openai import OpenAI
 from config import *
 
-#API_KEY = 'YOUR KEY HERE'
-
 def create_embeddings(df: pd.DataFrame, column_name: str, model: str) -> np.ndarray:
     """
     This function loads the OpenAI embedding model, encodes the text data in the specified column, 
@@ -29,28 +27,6 @@ def create_embeddings(df: pd.DataFrame, column_name: str, model: str) -> np.ndar
     
     return vectors
 
-def create_index(vectors: np.ndarray, index_file_path: str) -> faiss.Index:
-    """
-    This function creates a FAISS index, adds the provided vectors to the index, and saves it to a file.
-
-    Args:
-        vectors (np.ndarray): A NumPy array containing the vector embeddings.
-        index_file_path (str): The path to save the FAISS index file.
-
-    Returns:
-        faiss.Index: The created FAISS index.
-    """
-    #get the dimension of the vectors
-    dimension = vectors.shape[1]
-    #create a FAISS index with L2 distance metric (cosine similarity)
-    index = faiss.IndexFlatL2(dimension)
-    #add the vectors to the index
-    index.add(vectors)
-    #save the index to a file
-    faiss.write_index(index, index_file_path)
-    print("FAISS index is created and vectors are added to the index.")
-
-    return index
 def create_or_update_index(vectors: np.ndarray, index_file_path: str) -> faiss.Index:
     """
     Creates or updates a FAISS index while supporting different distance metrics (L2 or Cosine Similarity).
@@ -129,10 +105,14 @@ def generate_response(query: str, responses: List[str],model=CHAT_MODEL) -> str:
     #assuming your KEY is saved in your environment variable as described in the Readme
     client = OpenAI(api_key=API_KEY)
 
+    final_prompt = QUERY_PROMPT.format(query=query, responses=responses)
+
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": QUERY_PROMPT.format(query=query, responses=responses)}
+        {"role": "user", "content": final_prompt}
     ]
+    print(QUERY_PROMPT.format(query=query, responses=responses))
     response = client.chat.completions.create(model=model, messages=messages, temperature=TEMPERATURE)
     
     return response.choices[0].message.content
+

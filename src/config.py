@@ -30,10 +30,11 @@ TEMPERATURE=float(0)
 
 #File paths
 # Get the absolute path to the root directory
-ROOT_DIR = os.path.abspath(os.path.dirname(__file__))
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 INPUT_DATA_PATH = os.path.join(ROOT_DIR, "Data", "Customer_Support_Training_Dataset.csv")
 VECTOR_STORE_DIR = os.path.join(ROOT_DIR, "vector_store")
 VECTOR_STORE_FILE = os.path.join(VECTOR_STORE_DIR, "faiss_index.index")
+
 
 
 

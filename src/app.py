@@ -145,10 +145,8 @@ if "chat_history" not in st.session_state:
 # Create a chat container with a scrollbar
 st.markdown('<div class="chat-container">', unsafe_allow_html=True)
 for role, message in st.session_state["chat_history"]:
-    st.markdown(f'<div class="{"user-message" if role == "User" else "bot-message"}">{message}</div>',
-                unsafe_allow_html=True)
+    st.markdown(f'<div class="{"user-message" if role == "User" else "bot-message"}">{message}</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
-
 
 # ---- INPUT AREA ----
 def send_message():
@@ -174,16 +172,14 @@ def send_message():
         st.session_state.chat_history.append(("Lisa", llm_response))
         st.session_state.user_input = ""
         st.session_state.processing = False
-
+        st.rerun()
 
 # Initialize processing state
 if "processing" not in st.session_state:
     st.session_state.processing = False
 
-# Text input and send button
-user_input = st.text_input("Type your message...", key="user_input", disabled=st.session_state.processing,
-                           on_change=send_message)
-send_button = st.button("Send", on_click=send_message, disabled=st.session_state.processing)
+# Text input
+user_input = st.text_input("Type your message...", key="user_input", disabled=st.session_state.processing, on_change=send_message)
 
 # Display processing message
 if st.session_state.processing:

@@ -1,29 +1,43 @@
 # LLM-RAG-Based-Customer-Support-Assistant
 
-# Bitext - Customer Service Tagged Training Dataset for LLM-based Virtual Assistants
+## Overview
+
+This project aims to develop an AI-assisted customer support system that enhances customer interactions by leveraging Retrieval-Augmented Generation (RAG). The system combines Large Language Models (LLMs) with real-time knowledge retrieval to provide responses that are -
+**Accurate** 
+**Relevant**  
+**Contextually grounded**  
+-and contextually appropriate.
+
+Instead of relying solely on predefined responses or generative AI models, this approach integrates a knowledge retrieval mechanism to ensure responses are grounded in verified customer service data.
+  
+
+In addition to AI-generated responses, the system also extracts **key metadata**,useful for other downstream tasks, including:  
+**Urgency Score** (1-5) → Prioritizes and escalates urgent queries.   
+**Category Classification** → Helps assign queries to the right team.  
+**Named Entity Recognition (NER)** → Extracts essential details like **Order ID, Invoice Number, Refund Amount etc.**
 
 ## Dataset 
 
-## Overview
+### Overview
 This dataset is designed for training **LLM-based virtual assistants** in customer service interactions. It includes a variety of user requests, categorized by **intent and response**, along with **language variation tags**
 Each entry in the dataset contains the following fields:
 
 
-## Source of the Dataset
+### Source of the Dataset
 This dataset is provided by **Bitext Innovations** and is publicly available at:
 
 - **Hugging Face**: [Bitext Customer Service Dataset](https://huggingface.co/datasets/bitext/Bitext-customer-support-llm-chatbot-training-dataset)
 
 Please refer to the official dataset sources for **detailed documentation and licensing information**.
 
-## Structure
+### Structure
 - flags: tags (explained below in the Language Generation Tags section)
 - instruction: a user request from the Customer Service
 - category: the high-level semantic category for the intent
 - intent: the intent corresponding to the user instruction
 - response: an example expected response from the virtual assistant
 
-## Categories and Intents
+### Categories and Intents
 The dataset covers multiple **customer service categories**, including:
 - **Account Management**: create, delete, edit accounts, recover passwords.
 - **Order Processing**: cancel, change, track orders.
@@ -31,13 +45,13 @@ The dataset covers multiple **customer service categories**, including:
 - **Shipping & Delivery**: address changes, delivery times.
 - **Customer Support**: contact agents, submit complaints.
 
-## Language Variations
+### Language Variations
 The dataset includes **linguistic tags** to help train chatbots for **diverse user interactions**, such as:
 - **Politeness (P)**: "Could you please help me?"
 - **Colloquial (Q)**: "Can u cancel my order?"
 - **Errors & Typos (Z)**: "how can i activaet my card?"
 
-## Entities in the Dataset
+### Entities in the Dataset
 The dataset includes **predefined placeholders (entities)** that appear in customer queries. Few examples:
 
 | **Entity**                   | **Usage** |
@@ -53,9 +67,8 @@ The dataset includes **predefined placeholders (entities)** that appear in custo
 
 These placeholders help train **Named Entity Recognition (NER) models** to extract key details from customer requests.
 
-# LLM-RAG-Based Customer Support Assistant
 
-## Problem Statement
+## Objective
 
 The objective is to create an AI-assisted customer support system that can provide accurate, relevant, and contextually appropriate responses to user queries, automating and improving the customer support experience.
 

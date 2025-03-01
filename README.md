@@ -13,9 +13,9 @@ Instead of relying solely on predefined responses or generative AI models, this 
 
 In addition to AI-generated responses, the system also extracts key metadata that is useful for other downstream tasks, including:
 
-**Urgency Score**, which ranges from one to five, helps prioritize and escalate urgent queries.
-**Category Classification**, which ensures queries are assigned to the correct support team.
-**Named Entity Recognition**, which extracts essential details such as order identification numbers, invoice numbers, and refund amounts.
+- **Urgency Score**, which ranges from one to five, helps prioritize and escalate urgent queries.
+- **Category Classification**, which ensures queries are assigned to the correct support team.
+- **Named Entity Recognition**, which extracts essential details such as order identification numbers, invoice numbers, and refund amounts.
 
 ## Dataset 
 

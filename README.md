@@ -2,19 +2,20 @@
 
 ## Overview
 
-This project aims to develop an AI-assisted customer support system that enhances customer interactions by leveraging Retrieval-Augmented Generation (RAG). The system combines Large Language Models (LLMs) with real-time knowledge retrieval to provide responses that are -
-**Accurate** 
-**Relevant**  
-**Contextually grounded**  
--and contextually appropriate.
+This project aims to develop an AI-assisted customer support system that enhances customer interactions by leveraging Retrieval-Augmented Generation (RAG). The system combines Large Language Models (LLMs) with real-time knowledge retrieval to provide responses that are:
+
+- **Accurate**
+- **Relevant**
+- **Contextually grounded**
+- **Contextually appropriate**
 
 Instead of relying solely on predefined responses or generative AI models, this approach integrates a knowledge retrieval mechanism to ensure responses are grounded in verified customer service data.
-  
 
-In addition to AI-generated responses, the system also extracts **key metadata**,useful for other downstream tasks, including:  
-**Urgency Score** (1-5) → Prioritizes and escalates urgent queries.   
-**Category Classification** → Helps assign queries to the right team.  
-**Named Entity Recognition (NER)** → Extracts essential details like **Order ID, Invoice Number, Refund Amount etc.**
+In addition to AI-generated responses, the system also extracts key metadata that is useful for other downstream tasks, including:
+
+- **Urgency Score**, which ranges from one to five, helps prioritize and escalate urgent queries.
+- **Category Classification**, which ensures queries are assigned to the correct support team.
+- **Named Entity Recognition**, which extracts essential details such as order identification numbers, invoice numbers, and refund amounts.
 
 ![AI Assited Customer Support UI](Project1_RAG_Chatbot_demo.png)
 

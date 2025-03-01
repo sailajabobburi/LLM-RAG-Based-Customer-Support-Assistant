@@ -17,7 +17,7 @@ In addition to AI-generated responses, the system also extracts key metadata tha
 - **Category Classification**, which ensures queries are assigned to the correct support team.
 - **Named Entity Recognition**, which extracts essential details such as order identification numbers, invoice numbers, and refund amounts.
 
-![AI Assited Customer Support UI](Project1_RAG_Chatbot_demo.png)
+![AI Assited Customer Support UI](assets/Project1_RAG_Chatbot_demo.png)
 
 > *Figure: AI-powered customer support chat interface*
 

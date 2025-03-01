@@ -91,28 +91,27 @@ def semantic_similarity(query: str, index: faiss.Index, model: str, k: int = DEF
     
     return D, I
 
-def generate_response(query: str, responses: List[str],model=CHAT_MODEL) -> str:
+def generate_response(query: str, responses: List[str], chat_history: str, model=CHAT_MODEL) -> str:
     """
-    Calls the Language Model to generate a response based on the given query and list of responses.
+    Calls the Language Model to generate a response based on the given query, list of responses, and chat history.
 
     Args:
         query (str): The customer query.
         responses (List[str]): A list of example responses from the internal database.
+        chat_history (str): The conversation history.
 
     Returns:
         str: The generated response from the Language Model.
     """
-    #assuming your KEY is saved in your environment variable as described in the Readme
     client = OpenAI(api_key=API_KEY)
 
-    final_prompt = QUERY_PROMPT.format(query=query, responses=responses)
+    final_prompt = QUERY_PROMPT.format(query=query, responses=responses, chat_history=chat_history)
 
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "user", "content": final_prompt}
     ]
-    print(QUERY_PROMPT.format(query=query, responses=responses))
     response = client.chat.completions.create(model=model, messages=messages, temperature=TEMPERATURE)
-    
+
     return response.choices[0].message.content
 

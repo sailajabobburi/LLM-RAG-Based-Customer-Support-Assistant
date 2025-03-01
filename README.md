@@ -53,4 +53,122 @@ The dataset includes **predefined placeholders (entities)** that appear in custo
 
 These placeholders help train **Named Entity Recognition (NER) models** to extract key details from customer requests.
 
+# LLM-RAG-Based Customer Support Assistant
+
+## Problem Statement
+
+The objective is to create an AI-assisted customer support system that can provide accurate, relevant, and contextually appropriate responses to user queries, automating and improving the customer support experience.
+
+## Possible Solutions
+
+Several approaches could be taken to address this problem:
+
+1.  **Rule-based systems:** Traditional approach using predefined rules and decision trees. (Less flexible and scalable).
+2.  **Machine learning models (without RAG):** Train a model to directly map user queries to responses (May lack contextual awareness and struggle with unseen queries).
+3.  **LLM-based system (without RAG):** Rely solely on a large language model for response generation (Can be expensive and may hallucinate or provide inaccurate information).
+4.  **LLM-based system with Retrieval-Augmented Generation (RAG):** Combines the power of LLMs with a retrieval mechanism to ground the responses in a knowledge base (More accurate, relevant, and cost-effective).
+
+## Our Approach: LLM with Retrieval-Augmented Generation (RAG)
+
+We are building an AI-assisted customer support system using an LLM with Retrieval-Augmented Generation (RAG). This involves:
+
+*   Using the Bitext Customer Service Dataset as our knowledge base.
+*   Creating vector embeddings of the dataset.
+*   Building a FAISS index for efficient similarity search.
+*   Employing the generation capabilities of LLM to generate responses.
+*   Providing a Streamlit-based UI for users to interact with the system.
+
+## System Architecture
+
+This section outlines the key components and data flow within the AI-assisted Customer Support system.
+
+1.  **User Interface (Streamlit App):**
+    *   Provides the interactive chat interface for users to submit their queries.
+    *   Handles the display of conversation history and AI-generated responses.
+    *   The UI is designed for ease of use, featuring a text input where users can type their messages and press Enter to submit.  **[Note: As visible in the attached images (image.jpg), the UI displays "Press Enter to apply" within the text input. ]**
+
+2.  **Query Processing:**
+    *   Receives the user's input query from the UI.
+
+3.  **Semantic Similarity and Vector Database:**
+    *   Utilizes the `text-embedding-3-small` embedding model to generate a vector embedding of the user's query.
+    *   Uses FAISS (Facebook AI Similarity Search) with the `L2` distance metric to perform a similarity search against a vector database of pre-existing customer support responses. This database is built from the "[Bitext Customer Service Dataset](https://huggingface.co/datasets/bitext/Bitext-customer-support-llm-chatbot-training-dataset)".
+    *   The FAISS index is stored at `vector_store/faiss_index.index`.
+
+4.  **Retrieval-Augmented Generation (RAG):**
+    *   Retrieves the top-k most relevant customer support responses from the FAISS index based on the similarity search.
+    *   Combines the user's original query with the retrieved responses from the knowledge base.
+    *   This combined information is then passed to the LLM.
+
+5.  **Large Language Model (LLM):**
+    *   Employs the `gpt-4o` LLM to generate a contextually appropriate and helpful response.
+    *   The LLM is prompted with a specific set of instructions to ensure consistency in tone, style, and the information provided (e.g., urgency assessment, category classification).
+
+6.  **Response Formatting & Display:**
+    *   The LLM-generated response is formatted and displayed to the user through the Streamlit UI.
+    *   The response includes:
+        *   A natural language answer to the user's query.
+        *   An assessment of the query's urgency (on a scale of 1-5).
+        *   A categorization of the query's intent (e.g., "Account Management", "Order Processing").
+
+
+**Configuration:**
+
+The project uses the following key configuration parameters, managed through environment variables and default values:
+
+*   `OPENAI_API_KEY`:  The API key for accessing the OpenAI models.  This *must* be set in a `.env` file or as a system environment variable.
+*   `CHAT_MODEL`:  The OpenAI chat model used for response generation (defaults to `gpt-4o`).
+*   `EMBEDDING_MODEL`: The OpenAI embedding model used for generating vector embeddings (defaults to `text-embedding-3-small`).
+*   `FAISS_DISTANCE_METRIC`: The distance metric used by FAISS for similarity search (defaults to `"L2"`).
+*   `DEFAULT_K`: The number of top-k results to retrieve from the FAISS index (defaults to 3).
+
+## Setup and Installation
+
+Follow these steps to set up the AI-assisted Customer Support system:
+
+1.  **Clone the Repository:**
+
+    ```
+    git clone [Your GitHub Repository URL]
+    cd [Your Repository Directory]
+    ```
+
+2.  **Create a Virtual Environment (Recommended):**
+
+    ```
+    python3 -m venv venv
+    source venv/bin/activate  # On Linux/macOS
+    venv\Scripts\activate  # On Windows
+    ```
+
+3.  **Install Dependencies:**
+
+    ```
+    pip install -r requirements.txt
+    ```
+
+4.  **Configure Environment Variables:**
+
+    *   Create a `.env` file in the project's root directory.
+    *   Add your OpenAI API key to the `.env` file:
+
+        ```
+        OPENAI_API_KEY=YOUR_OPENAI_API_KEY
+        ```
+5.  **Download the Dataset (If Necessary):**
+
+    *   This project uses the [Bitext Customer Service Dataset](https://huggingface.co/datasets/bitext/Bitext-customer-support-llm-chatbot-training-dataset).
+    *   [**Specify how the dataset is downloaded or accessed.** Is it downloaded automatically by the code? Does the user need to download it manually and place it in a specific directory?  Be *very* explicit.]
+
+6.  **Create the Vector Store Directory:**
+
+    ```
+    mkdir vector_store
+    ```
+
+7.  **Download the FAISS Index:**
+
+    *  [**Specify how the FAISS index is downloaded or accessed. Is it downloaded automatically by the code? Does the user need to train it and save it? Be *very* explicit.]**
+
+
 

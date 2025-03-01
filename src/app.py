@@ -12,16 +12,16 @@ st.markdown(
     """
     <style>
         /* Fix header, make it fully visible and static */
-        .stApp {
-            margin-top: 120px;
+        body {
+            margin-top: 120px; /* Adjusted to accommodate fixed header */
         }
 
-        header[data-testid="stHeader"] {
+        .stApp header[data-testid="stHeader"] {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 100px;
+            height: 120px;
             background: #F5F7FA;
             z-index: 999990;
             display: flex;
@@ -31,60 +31,92 @@ st.markdown(
             flex-direction: column;
         }
 
-        header[data-testid="stHeader"] img {
+        .stApp header[data-testid="stHeader"] img {
             height: 50px;
             margin-bottom: 5px;
         }
 
-        header[data-testid="stHeader"] h1 {
+        .stApp header[data-testid="stHeader"] h1 {
             color: #004AAD;
-            font-size: 22px;
-            font-weight: bold;
+            font-size: 24px;
+            font-weight: 700;
             margin: 0;
             text-align: center;
         }
 
-        /* Chat container */
-        .chat-container {
-            border-radius: 12px;
-            min-height: 400px;
-            max-height: 500px;
-            overflow-y: auto;
-            padding: 10px;
+        /* Main content layout */
+        .main-content {
             display: flex;
             flex-direction: column;
             gap: 10px;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Chat container */
+        .chat-container {
+            background: none;
+            border-radius: 12px;
+            height: calc(100vh - 280px); /* Adjust height to fit screen */
+            overflow-y: auto; /* Add a scrollbar when content overflows */
+            margin-bottom: 10px;
         }
 
         .user-message {
             background-color: #0078FF;
             color: white;
             padding: 10px;
-            border-radius: 12px;
-            margin: 5px 10px;
+            border-radius: 10px;
+            margin: 5px 0;
             text-align: right;
-            align-self: flex-end;
-            max-width: 75%;
+            width: fit-content;
+            max-width: 80%;
+            margin-left: auto;
         }
 
         .bot-message {
             background-color: #F1F1F1;
             color: black;
             padding: 10px;
-            border-radius: 12px;
-            margin: 5px 10px;
+            border-radius: 10px;
+            margin: 5px 0;
             text-align: left;
-            align-self: flex-start;
-            max-width: 75%;
+            width: fit-content;
+            max-width: 80%;
+        }
+
+        /* Input area */
+        .input-area {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .input-area input[type="text"] {
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 8px;
+            font-size: 16px;
         }
 
         /* Processing message */
         .processing-message {
-            color: #0078FF;
-            font-size: 14px;
-            font-weight: bold;
-            margin-top: 5px;
             text-align: center;
+            font-style: italic;
+            color: #888;
+        }
+
+        /* Hide default Streamlit header */
+        .stApp > header {
+            display: none !important;
+        }
+
+        /* Ensure content starts below our custom header */
+        .stApp > .main {
+            margin-top: 120px;
         }
     </style>
     """,
@@ -102,73 +134,59 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# ---- RESET CHAT HISTORY ON REFRESH ----
+# ---- MAIN CONTENT ----
+st.markdown('<div class="main-content">', unsafe_allow_html=True)
+
+# ---- CHAT MEMORY ----
 if "chat_history" not in st.session_state:
     st.session_state["chat_history"] = [("Lisa", "Hi, I'm Lisa, your AI-assisted assistant! How can I help you today?")]
 
-# ---- CHAT CONTAINER (DYNAMIC) ----
-chat_container = st.container()
-processing_placeholder = st.empty()  # Placeholder for processing message
+# ---- DISPLAY CHAT MESSAGES ----
+# Create a chat container with a scrollbar
+st.markdown('<div class="chat-container">', unsafe_allow_html=True)
+for role, message in st.session_state["chat_history"]:
+    st.markdown(f'<div class="{"user-message" if role == "User" else "bot-message"}">{message}</div>',
+                unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
 
-# Function to update chat UI
-def update_chat():
-    chat_container.markdown('<div class="chat-container">', unsafe_allow_html=True)
-    for role, message in st.session_state["chat_history"]:
-        chat_container.markdown(
-            f'<div class="{"user-message" if role == "User" else "bot-message"}">{message}</div>',
-            unsafe_allow_html=True
-        )
-    chat_container.markdown('</div>', unsafe_allow_html=True)
 
-# Initial chat display
-update_chat()
-
-# ---- INPUT AREA & ASK BUTTON ----
-user_text = st.text_input("Type your message...", key="user_input", placeholder="Type your message...")
-ask_button = st.button("Ask")  # "Ask" button
-
+# ---- INPUT AREA ----
 def send_message():
-    if user_text:  # Only process if user input exists
-        # Append user message to chat history
-        st.session_state.chat_history.append(("User", user_text))
+    if st.session_state.user_input and not st.session_state.get("processing", False):
+        st.session_state.processing = True
 
-        # Show processing message below input field
-        processing_placeholder.markdown('<div class="processing-message">Processing... Please wait</div>', unsafe_allow_html=True)
+        st.session_state.chat_history.append(("User", st.session_state.user_input))
+        text = st.session_state.user_input
 
-        # Update chat UI before processing
-        update_chat()
-
-        # Prepare conversation context for LLM
         full_conversation = "\n".join(
             [f"{role}: {msg}" for role, msg in st.session_state["chat_history"]]
         )
 
-        # Load vector DB and data
         index = faiss.read_index(config.VECTOR_STORE_FILE)
         df = pd.read_csv(config.INPUT_DATA_PATH)
 
-        # Get similar responses
-        distances, indices = semantic_similarity(user_text, index, model=config.EMBEDDING_MODEL)
+        distances, indices = semantic_similarity(text, index, model=config.EMBEDDING_MODEL)
         top_similar_instructions = df.iloc[indices[0]].reset_index(drop=True)
         top_similar_instructions['response'] = distances[0]
 
-        # Generate AI response
-        llm_response = generate_response(user_text, top_similar_instructions['response'].tolist(), full_conversation)
+        llm_response = generate_response(text, top_similar_instructions['response'].tolist(), full_conversation)
 
-        # Store bot response in chat history
         st.session_state.chat_history.append(("Lisa", llm_response))
+        st.session_state.user_input = ""
+        st.session_state.processing = False
 
-        # Update chat UI again after response
-        update_chat()
 
-        # Remove processing message
-        processing_placeholder.empty()
+# Initialize processing state
+if "processing" not in st.session_state:
+    st.session_state.processing = False
 
-        # **Fix:** Reset input field correctly by removing key instead of modifying
-        st.session_state.pop("user_input", None)  # Removes 'user_input' key safely
+# Text input and send button
+user_input = st.text_input("Type your message...", key="user_input", disabled=st.session_state.processing,
+                           on_change=send_message)
+send_button = st.button("Send", on_click=send_message, disabled=st.session_state.processing)
 
-# ---- CALL FUNCTION WHEN BUTTON IS CLICKED ----
-if ask_button:
-    send_message()
+# Display processing message
+if st.session_state.processing:
+    st.markdown('<div class="processing-message">Processing... Please wait.</div>', unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)

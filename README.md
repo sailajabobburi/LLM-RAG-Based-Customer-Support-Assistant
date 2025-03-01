@@ -155,20 +155,16 @@ Follow these steps to set up the AI-assisted Customer Support system:
         ```
         OPENAI_API_KEY=YOUR_OPENAI_API_KEY
         ```
-5.  **Download the Dataset (If Necessary):**
+5. **Run the Streamlit App:**
 
-    *   This project uses the [Bitext Customer Service Dataset](https://huggingface.co/datasets/bitext/Bitext-customer-support-llm-chatbot-training-dataset).
-    *   [**Specify how the dataset is downloaded or accessed.** Is it downloaded automatically by the code? Does the user need to download it manually and place it in a specific directory?  Be *very* explicit.]
+    *   To start the application, use the following command:
 
-6.  **Create the Vector Store Directory:**
+        ```
+        streamlit run src/app.py
+        ```
 
-    ```
-    mkdir vector_store
-    ```
+    *   This command will launch the Streamlit app in your web browser.
 
-7.  **Download the FAISS Index:**
-
-    *  [**Specify how the FAISS index is downloaded or accessed. Is it downloaded automatically by the code? Does the user need to train it and save it? Be *very* explicit.]**
 
 
 

@@ -4,10 +4,10 @@
 
 This project aims to develop an AI-assisted customer support system that enhances customer interactions by leveraging Retrieval-Augmented Generation (RAG). The system combines Large Language Models (LLMs) with real-time knowledge retrieval to provide responses that are:
 
-**Accurate
-Relevant
-Contextually grounded
-Contextually appropriate**
+- **Accurate**
+- **Relevant**
+- **Contextually grounded**
+- **Contextually appropriate**
 
 Instead of relying solely on predefined responses or generative AI models, this approach integrates a knowledge retrieval mechanism to ensure responses are grounded in verified customer service data.
 
